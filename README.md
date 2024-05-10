@@ -1,1 +1,1 @@
-# shark-attacks
+![Image PNG](metabase_dashboard.png)

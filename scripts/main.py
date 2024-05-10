@@ -9,9 +9,11 @@ def extract_data():
 
 def set_dtypes(df):
 
+    print(df)
     df['date_heure'] = pd.to_datetime(df['date_heure'])
-    df['date'] = pd.to_datetime(df['date'], dayfirst=True)
-    df['heure'] = pd.to_datetime(df['heure'], format='%H:%M') 
+    # df['date'] = pd.to_datetime(df['date'], dayfirst=True)
+    df['heure'] = df['heure'].astype('string')
+    df['date'] = df['date'].astype('string')
 
     df['consommation_brute_gaz_terega'] = df['consommation_brute_gaz_terega'].astype('Int16')
 
@@ -28,4 +30,6 @@ def set_dtypes(df):
 
 df = extract_data()
 set_dtypes(df)
+print(df["heure"])
+
 load(df)
