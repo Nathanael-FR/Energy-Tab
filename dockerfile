@@ -13,4 +13,4 @@ COPY data/ ./data
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Commande par défaut pour exécuter le script Python
-CMD ["python", "./scripts/load.py"]
+CMD ["python","-u","./scripts/main.py"]
