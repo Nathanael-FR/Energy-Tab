@@ -1,0 +1,47 @@
+SELECT
+    CASE EXTRACT(MONTH FROM date_heure)
+        WHEN 1 THEN 'Jan'
+        WHEN 2 THEN 'Fev'
+        WHEN 3 THEN 'Mar'
+        WHEN 4 THEN 'Avr'
+        WHEN 5 THEN 'Mai'
+        WHEN 6 THEN 'Juin'
+        WHEN 7 THEN 'Juil'
+        WHEN 8 THEN 'Aou'
+        WHEN 9 THEN 'Sep'
+        WHEN 10 THEN 'Oct'
+        WHEN 11 THEN 'Nov'
+        WHEN 12 THEN 'Dec'
+    END AS month_label,
+    EXTRACT(MONTH FROM date_heure) as m,
+    AVG(consommation_brute_electricite_rte) AS moyenne_consommation_elec,
+    AVG(consommation_brute_gaz_totale) AS moyenne_consommation_gaz
+FROM
+    elec_conso
+WHERE
+    EXTRACT(YEAR FROM date_heure) = 2023
+GROUP BY
+    month_label,m
+ORDER BY
+    EXTRACT(MONTH FROM date_heure);
+
+
+
+
+    SELECT
+    heure,
+    AVG(CASE WHEN EXTRACT(YEAR FROM date_heure) = 2024 THEN consommation_brute_electricite_rte ELSE NULL END) AS moyenne_consommation_2024,
+    AVG(CASE WHEN EXTRACT(YEAR FROM date_heure) = 2023 THEN consommation_brute_electricite_rte ELSE NULL END) AS moyenne_consommation_2023,
+    AVG(CASE WHEN EXTRACT(YEAR FROM date_heure) = 2022 THEN consommation_brute_electricite_rte ELSE NULL END) AS moyenne_consommation_2022
+
+FROM
+    elec_conso
+WHERE
+    EXTRACT(YEAR FROM date_heure) IN (2023, 2024, 2022)
+GROUP BY
+    heure
+ORDER BY
+    heure
+
+
+    
