@@ -58,10 +58,8 @@ def get_data():
 def transform():
 
     df = pd.ExcelFile('./data/data_eco2mix.xls').parse('Sheet1')
-    print(df.columns)
-    print(df.describe)
-    print(df.dtypes)
+    
     ...
 
 
-transform()
+get_data()
