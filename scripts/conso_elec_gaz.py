@@ -3,10 +3,9 @@ import logging
 
 
 logging.basicConfig(
-    level=logging.DEBUG,
-    datefmt="%Y-%m-%d %H:%M:%S",
-    filename="etl.log"
-)
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S')
 
 DATA_URL = "https://www.data.gouv.fr/fr/datasets/r/cfc27ff9-1871-4ee8-be64-b9a290c06935"
 

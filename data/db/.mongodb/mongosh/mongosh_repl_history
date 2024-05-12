@@ -1,3 +1,14 @@
+db.conso_elec_gaz.find()
+db.conso_elec_gaz.show()
+db.conso_elec_gaz.show( )
+db.eco2mix.find( )
+db.collectionName.find()
+show tables
+show collections
+help
+use project
+help
+show dbs
 show collections
 use project
 show dbs

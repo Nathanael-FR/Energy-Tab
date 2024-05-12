@@ -5,16 +5,14 @@ import logging
 
 # Configurer le logger avec la même configuration que dans le script principal
 logging.basicConfig(
-    level=logging.DEBUG,
-    datefmt="%Y-%m-%d %H:%M:%S",
-    filename="etl.log"
-)
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S')
 
 
 def main():
 
     logging.info("Start ETL process.")
-    print("test")
     data = eco2mix_run()
     load(data, "eco2mix")
     data = conso_run()

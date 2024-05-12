@@ -4,10 +4,9 @@ import pandas as pd
 import logging
 
 logging.basicConfig(
-    level=logging.DEBUG,
-    datefmt="%Y-%m-%d %H:%M:%S",
-    filename="etl.log"
-)
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S')
 
 def load(df, collection_name):
 

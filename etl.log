@@ -1,9 +1,0 @@
-INFO:root:Start ETL process.
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): eco2mix.rte-france.com:443
-DEBUG:urllib3.connectionpool:https://eco2mix.rte-france.com:443 "GET /curves/eco2mixDl?date=12/05/2024 HTTP/1.1" 200 3668
-INFO:root:Eco2mix data successfuly downloaded.
-INFO:root:Eco2mix corrupted data successfuly cleaned.
-INFO:root:Eco2mix data successfuly cleaned.
-INFO:root:Conso data successfuly downloaded.
-INFO:root:Conso data successfuly cleaned.
-INFO:root:End ETL process.

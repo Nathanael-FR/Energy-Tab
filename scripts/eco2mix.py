@@ -10,10 +10,9 @@ import io
 
 
 logging.basicConfig(
-    level=logging.DEBUG,
-    datefmt="%Y-%m-%d %H:%M:%S",
-    filename="etl.log"
-)
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S')
 
 DATA_URL = "https://eco2mix.rte-france.com/curves/eco2mixDl?date={}/{}/{}"
 
