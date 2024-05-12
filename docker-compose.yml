@@ -1,38 +1,25 @@
 version: '3'
 
 services:
-  postgres:
-    image: postgres:latest
+  mongodb:
+    image: mongo:latest
     restart: always
     environment:
-      POSTGRES_DB: project
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: password
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     ports:
-      - "5432:5432"
+      - "27017:27017"
     volumes:
-      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/db:/data/db
 
   python-app:
     build:
       context: .
     depends_on:
-      - postgres
+      - mongodb
     volumes:
       - ./scripts:/app/scripts
       - ./data:/app/data
     command: python /app/scripts/main.py
-
-  metabase:
-    image: metabase/metabase:latest
-    ports:
-      - 3000:3000
-    environment:
-      MB_DB_TYPE: postgres
-      MB_DB_DBNAME: project
-      MB_DB_PORT: 5432
-      MB_DB_USER: root
-      MB_DB_PASS: password
-      MB_DB_HOST: postgres
-    depends_on:
-      - postgres
+    env_file: .env  # Charge les variables d'environnement à partir du fichier .env

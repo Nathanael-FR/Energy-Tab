@@ -1,35 +1,25 @@
-import pandas as pd
-import numpy as np
 from load import load
-DATA_PATH = "data/consommation-quotidienne-brute.csv"
+from eco2mix import run as eco2mix_run
+from conso_elec_gaz import run as conso_run
+import logging
 
-def extract_data():
+# Configurer le logger avec la même configuration que dans le script principal
+logging.basicConfig(
+    level=logging.DEBUG,
+    datefmt="%Y-%m-%d %H:%M:%S",
+    filename="etl.log"
+)
 
-    return pd.read_csv(DATA_PATH, delimiter=";")
 
-def set_dtypes(df):
+def main():
 
-    print(df)
-    df['date_heure'] = pd.to_datetime(df['date_heure'])
-    # df['date'] = pd.to_datetime(df['date'], dayfirst=True)
-    df['heure'] = df['heure'].astype('string')
-    df['date'] = df['date'].astype('string')
+    logging.info("Start ETL process.")
+    print("test")
+    data = eco2mix_run()
+    load(data, "eco2mix")
+    data = conso_run()
+    load(data, "conso_elec_gaz")
+    logging.info("End ETL process.")
 
-    df['consommation_brute_gaz_terega'] = df['consommation_brute_gaz_terega'].astype('Int16')
-
-    float_to_Int32 = ['consommation_brute_gaz_grtgaz', 
-                'consommation_brute_electricite_rte', 
-                'consommation_brute_gaz_totale', 
-                'consommation_brute_totale']
-
-    df[float_to_Int32] = df[float_to_Int32].astype('Int32')
-
-    df['statut_rte'] = df['statut_rte'].astype('category')
-    df['statut_grtgaz'] = df['statut_grtgaz'].astype('category', errors='ignore')
-    df['statut_terega'] = df['statut_terega'].astype('string', errors='ignore')
-
-df = extract_data()
-set_dtypes(df)
-print(df["heure"])
-
-load(df)
+if __name__ == "__main__":
+    main()
