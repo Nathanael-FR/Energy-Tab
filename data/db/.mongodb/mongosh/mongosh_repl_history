@@ -1,14 +1,9 @@
-db.conso_elec_gaz.find()
-db.conso_elec_gaz.show()
-db.conso_elec_gaz.show( )
-db.eco2mix.find( )
-db.collectionName.find()
+db.eco2mix.count()
+select * from eco2mix
+select count(*) from eco2mix
 show tables
-show collections
-help
 use project
-help
-show dbs
-show collections
+use eco2mix
+show tables
 use project
 show dbs

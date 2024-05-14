@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 
 services:
@@ -14,6 +14,27 @@ services:
     volumes:
       - ./data/db:/data/db
 
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    restart: always
+    environment:
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DATABASE: ${CLICKHOUSE_DATABASE}
+      CLICKHOUSE_CONFIG_PATH: /etc/clickhouse-server/config.d
+      CLICKHOUSE_CONFIG_FILE: /etc/clickhouse-server/config.xml
+    ports:
+      - "8123:8123" # Used by ClickHouse HTTP interface.
+
+      # Used by ClickHouse applications and processes like 
+      # clickhouse-server, clickhouse-client, and native ClickHouse tools. 
+      # Used for inter-server communication for distributed queries.
+      - "9000:9000"   
+    volumes:
+      - ./data/clickhouse:/var/lib/clickhouse
+    depends_on:
+      - mongodb
+      
   python-app:
     build:
       context: .

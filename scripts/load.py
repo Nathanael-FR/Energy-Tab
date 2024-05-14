@@ -1,6 +1,6 @@
 import pymongo
 import pandas as pd
-
+import clickhouse_connect
 import logging
 
 logging.basicConfig(
@@ -8,7 +8,7 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S')
 
-def load(df, collection_name):
+def load_db(df, collection_name):
 
     host = 'mongodb'
     port = 27017
@@ -42,3 +42,22 @@ def load(df, collection_name):
 
     finally:
         client.close()
+
+
+
+
+def load_dw(df=None, collection_name=""):
+
+    host = 'clickhouse'
+    port = 8123
+    dbname = 'project'
+    user = 'root'
+    password = 'password'
+
+    client = clickhouse_connect.get_client(host=host, 
+                                           port=port, 
+                                           database=dbname, 
+                                           username=user, 
+                                           password=password)
+
+    print(client.server_version)

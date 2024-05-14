@@ -1,4 +1,4 @@
-from load import load
+from load import load_db, load_dw
 from eco2mix import run as eco2mix_run
 from conso_elec_gaz import run as conso_run
 import logging
@@ -14,10 +14,12 @@ def main():
 
     logging.info("Start ETL process.")
     data = eco2mix_run()
-    load(data, "eco2mix")
+    load_db(data, "eco2mix")
     data = conso_run()
-    load(data, "conso_elec_gaz")
+    load_db(data, "conso_elec_gaz")
     logging.info("End ETL process.")
 
+    load_dw()
+    
 if __name__ == "__main__":
     main()

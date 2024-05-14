@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from utils.execuction_time import exec_time 
 import requests
 from datetime import datetime
 from zipfile import ZipFile
@@ -16,10 +17,11 @@ logging.basicConfig(
 
 DATA_URL = "https://eco2mix.rte-france.com/curves/eco2mixDl?date={}/{}/{}"
 
+@exec_time
 def get_data():
 
     today_date = datetime.now()
-    day, month, year = today_date.day,  today_date.month, today_date.year
+    day, month, year = today_date.day - 1,  today_date.month, today_date.year
 
     day = f'0{day}' if day < 10 else day
     month = f'0{month}' if month < 10 else month
@@ -47,15 +49,15 @@ def get_data():
             for j, val in enumerate(row.replace('\n', '').split('\t')):
                 sheet.write(i, j, val)
             
-        xldoc.save('./data/data_eco2mix.xls')
-        df = pd.ExcelFile('./data/data_eco2mix.xls').parse('Sheet1')
-        logging.info("Eco2mix corrupted data successfuly cleaned.")
+        xldoc.save('./data/download/data_eco2mix.xls')
+        df = pd.ExcelFile('./data/download/data_eco2mix.xls').parse('Sheet1')
+        logging.info("Eco2mix corrupted file successfuly repaired.")
         
         return df
     else:
         logging.error(f"Error retrieving data ({res.status_code}): eco2mix.")
 
-
+@exec_time
 def clean_data(df):
     df = df.drop(columns=["Périmètre","Nature","Consommation corrigée"], index=1)
     df.drop(df.tail(1).index,inplace = True)
@@ -76,7 +78,8 @@ def clean_data(df):
 
     int32_cols = ["consommation","prevision_j-1","prevision_j","nucleaire"]
 
-    int16_cols = list(df.loc[:,~df.columns.isin(["date","heures"]+int32_cols)].columns)
+    # int16_cols = list(df.loc[:,~df.columns.isin(["date","heures"]+int32_cols)].columns)
+    int16_cols = [col for col in df.columns if col not in ["date","heures"]+int32_cols]
 
     df[int32_cols] = df[int32_cols].apply(pd.to_numeric, 
                                         errors='coerce', downcast='integer')\
@@ -93,3 +96,5 @@ def run():
     df = get_data()
     return clean_data(df)
 
+if __name__ == "__main__":
+    run()   
