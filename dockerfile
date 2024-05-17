@@ -13,4 +13,4 @@ COPY data/ ./data
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Commande par défaut pour exécuter le script Python
-CMD ["spark-submit", "--master", "local", "./scripts/main.py"]
+CMD ["spark-submit", "--master", "local", "./main.py"]

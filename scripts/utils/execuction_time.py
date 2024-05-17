@@ -13,6 +13,6 @@ def exec_time(func):
         result = func(*args, **kwargs)
         end_time = time.time()
         execution_time = end_time - start_time
-        logging.info(f"Function {os.path.basename(__file__)}:{func.__name__} executed in {execution_time:.5}s.")
+        logging.info(f"Function: {func.__code__.co_filename}:{func.__name__} executed in {execution_time:.5}s.")
         return result
     return wrapper

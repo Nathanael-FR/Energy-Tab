@@ -2,5 +2,7 @@ test/
 .env
 metabase_dashboard.png
 push_command.txt
-
+README.md
+.gitignore
+__pycache__/
 

@@ -1,9 +1,0 @@
-db.eco2mix.count()
-select * from eco2mix
-select count(*) from eco2mix
-show tables
-use project
-use eco2mix
-show tables
-use project
-show dbs

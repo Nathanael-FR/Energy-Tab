@@ -38,10 +38,10 @@ services:
   python-app:
     build:
       context: .
+      dockerfile: dockerfile
     depends_on:
       - mongodb
     volumes:
-      - ./scripts:/app/scripts
-      - ./data:/app/data
-    command: python /app/scripts/main.py
+      - .:/app
+    command: python /app/main.py
     env_file: .env  # Charge les variables d'environnement à partir du fichier .env
