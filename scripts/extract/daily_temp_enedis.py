@@ -14,7 +14,6 @@ def get_data(data = DATA_URL):
 
     df = pd.read_csv(data, delimiter=";")
 
-    # Convert Horodate "2024-05-15T19:00:00+02:00" to 
     df['Horodate'] = df['Horodate'].apply(lambda x: datetime.fromisoformat(x))
     df['Année-Mois-Jour'] = pd.to_datetime(df['Année-Mois-Jour'], format='%Y-%m-%d')
 

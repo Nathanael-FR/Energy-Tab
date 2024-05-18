@@ -4,4 +4,4 @@ data/
 *.wt
 *.lock
 *.turtle
-
+*__pycache__/
