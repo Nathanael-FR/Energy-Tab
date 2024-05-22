@@ -27,19 +27,13 @@ def load_db(df, collection_name):
         collection = db[collection_name]
 
         records = df.to_dict(orient='records')
-        logging.info("Convert dataframe to dict.")
+        logging.info(f"Convert dataframe to json format ({collection_name}).")
 
         collection.insert_many(records)
-        logging.info("Insertion des données dans la collection réussie.")
+        logging.info("Insert into mongodb successful ({collection_name}).")
 
-        query = collection.find().limit(5)
-        if query:
-            logging.info("Récupération des données depuis MongoDB réussie.")
-        else :
-            logging.error("Erreur lors de la récupération des données depuis MongoDB.")
-            
     except Exception as e:
-        logging.error(f"Erreur lors de la connexion à MongoDB: {e}")
+        logging.error(f"Connection to mongodb failed ({collection_name}): {e}")
 
     finally:
         client.close()

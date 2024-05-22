@@ -1,4 +1,6 @@
 from __future__ import unicode_literals
+
+import aiohttp
 from scripts.utils.execuction_time import exec_time 
 import requests
 from datetime import datetime
@@ -8,7 +10,8 @@ import logging
 import pandas as pd
 from xlwt import Workbook
 import io
-
+import time
+import asyncio
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -17,8 +20,12 @@ logging.basicConfig(
 
 DATA_URL = "https://eco2mix.rte-france.com/curves/eco2mixDl?date={}/{}/{}"
 
-@exec_time
-def get_data():
+async def fetch_data(session : aiohttp.ClientSession, url: str) -> bytes:
+    async with session.get(url) as response:
+        response.raise_for_status()
+        return await response.read()
+    
+async def get_data() -> pd.DataFrame:
 
     today_date = datetime.now()
     day, month, year = today_date.day - 1,  today_date.month, today_date.year
@@ -26,11 +33,17 @@ def get_data():
     day = f'0{day}' if day < 10 else day
     month = f'0{month}' if month < 10 else month
 
+    start = time.time()
     res = requests.get(DATA_URL.format(day, month, year))
 
-    if res.status_code == 200:
-        logging.info("Eco2mix data successfuly downloaded.")
-        z = ZipFile(io.BytesIO(res.content))
+    try:
+        start = time.time()
+        async with aiohttp.ClientSession() as session:
+            res_content = await fetch_data(session, DATA_URL.format(day, month, year))
+        end = time.time()
+        logging.info(f"eco2mix data successfully downloaded: {end-start:.2f}s")
+
+        z = ZipFile(io.BytesIO(res_content))
         z.extractall("./data")
 
         # recover corrupted .xls file :
@@ -51,11 +64,12 @@ def get_data():
             
         xldoc.save('./data/download/data_eco2mix.xls')
         df = pd.ExcelFile('./data/download/data_eco2mix.xls').parse('Sheet1')
-        logging.info("Eco2mix corrupted file successfuly repaired.")
+        logging.info("eco2mix corrupted file successfuly repaired.")
         
         return df
-    else:
-        logging.error(f"Error retrieving data ({res.status_code}): eco2mix.")
+    except Exception as e:
+        logging.error(f"Error retrieving data ({e}): eco2mix.")
+
 
 @exec_time
 def clean_data(df):
@@ -91,9 +105,9 @@ def clean_data(df):
     logging.info("Eco2mix data successfuly cleaned.")
     return df
 
-def run():
-    df = get_data()
+async def run():
+    df = await get_data()
     return clean_data(df)
-
+  
 if __name__ == "__main__":
-    run()   
+    asyncio.run(run())
